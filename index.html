@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para ti, mi amor</title>
+    <style>
+        * {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+        }
+    
+        body {
+          font-family: 'Arial', sans-serif;
+          background-color: #f9f1f1;
+          min-height: 100vh;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          padding: 20px;
+        }
+    
+        .container {
+          display: flex;
+          flex-direction: row;
+          width: 100%;
+          max-width: 1200px;
+          min-height: 80vh;
+          background-color: white;
+          border-radius: 20px;
+          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+          overflow: hidden;
+        }
+    
+        .message-container {
+          flex: 1;
+          padding: 30px;
+          background: linear-gradient(135deg, #f5f7fa 0%, #e8e8e8 100%);
+          overflow-y: auto;
+        }
+    
+        .message {
+          font-size: 1rem;
+          line-height: 1.7;
+          color: #333;
+          animation: fadeIn 2s ease forwards;
+        }
+    
+        .message h1 {
+          color: #e74c3c;
+          margin-bottom: 20px;
+          font-size: 1.5rem;
+          text-align: center;
+        }
+    
+        .message p {
+          margin-bottom: 15px;
+          text-align: justify;
+        }
+    
+        .animation-container {
+          flex: 1;
+          background: linear-gradient(135deg, #f9e7e7 0%, #fce7e7 100%);
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          position: relative;
+          padding: 20px;
+        }
+    
+        .rose-container {
+          position: relative;
+          width: 200px;
+          height: 200px;
+        }
+    
+        .stem {
+          position: absolute;
+          width: 8px;
+          height: 0;
+          background: linear-gradient(to right, #388e3c, #2e7d32);
+          bottom: 0;
+          left: 50%;
+          transform: translateX(-50%);
+          border-radius: 4px;
+          z-index: 1;
+          transition: height 2s ease;
+        }
+    
+        .leaf {
+          position: absolute;
+          width: 20px;
+          height: 30px;
+          background: linear-gradient(135deg, #4caf50, #388e3c);
+          border-radius: 50% 50% 50% 0;
+          transform: rotate(-45deg);
+          opacity: 0;
+          transition: opacity 1s ease;
+          z-index: 2;
+        }
+    
+        .leaf:before {
+          content: '';
+          position: absolute;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(to bottom right, rgba(255,255,255,0.3), transparent);
+          border-radius: inherit;
+        }
+    
+        .leaf-right {
+          right: -15px;
+          top: 50px;
+          transform: rotate(135deg);
+        }
+    
+        .leaf-left {
+          left: -15px;
+          top: 80px;
+          transform: rotate(-45deg);
+        }
+    
+        .flower {
+          position: absolute;
+          width: 0;
+          height: 0;
+          bottom: 150px;
+          left: 50%;
+          transform: translateX(-50%);
+          opacity: 0;
+          transition: all 2s ease;
+        }
+    
+        .flower:before {
+          content: '';
+          position: absolute;
+          width: 26px;
+          height: 26px;
+          background: radial-gradient(circle, #43a047, #2e7d32);
+          border-radius: 50%;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          z-index: 2;
+        }
+    
+        .petal {
+          position: absolute;
+          background: linear-gradient(135deg, #e74c3c, #c0392b);
+          width: 40px;
+          height: 60px;
+          border-radius: 60% 0 60% 40%;
+          transform-origin: bottom center;
+          opacity: 0;
+          transition: all 1s ease;
+        }
+    
+        .petal:nth-child(odd) {
+          background: linear-gradient(135deg, #ff6b6b, #e74c3c);
+        }
+    
+        .petal:after {
+          content: '';
+          position: absolute;
+          width: 100%;
+          height: 100%;
+          background: radial-gradient(circle at 60% 40%, rgba(255,255,255,0.3), transparent 50%);
+          border-radius: inherit;
+        }
+    
+        .heart {
+          position: absolute;
+          width: 150px;
+          height: 135px;
+          bottom: 120px;
+          left: 50%;
+          transform: translateX(-50%) scale(0);
+          opacity: 0;
+          transition: all 2s ease;
+        }
+    
+        .heart:before,
+        .heart:after {
+          content: "";
+          position: absolute;
+          left: 75px;
+          top: 0;
+          width: 75px;
+          height: 120px;
+          background: #e74c3c;
+          border-radius: 75px 75px 0 0;
+          transform: rotate(-45deg);
+          transform-origin: 0 100%;
+        }
+    
+        .heart:after {
+          left: 0;
+          transform: rotate(45deg);
+          transform-origin: 100% 100%;
+        }
+    
+        @media (max-width: 768px) {
+          .container {
+            flex-direction: column-reverse;
+            height: auto;
+          }
+    
+          .message-container,
+          .animation-container {
+            width: 100%;
+            height: auto;
+            min-height: 50vh;
+          }
+    
+          .message {
+            font-size: 0.95rem;
+          }
+    
+          .rose-container {
+            width: 150px;
+            height: 150px;
+          }
+    
+          .heart {
+            width: 120px;
+            height: 110px;
+          }
+        }
+    
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+            transform: translateY(20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+      </style>
+</head>
+<body>
+    <div class="container">
+        <div class="message-container">
+            <div class="message" id="message">
+                <h1>Para el amor de mi vida</h1>
+                <p>Te hice este detalle por nuestros tres meses de novios porque tú te mereces cosas bonitas y creativas, cosas que estén a la altura de lo que me haces sentir cada día. Desde que llegaste a mi vida, le has dado tanto sentido, tanta luz, que no hay forma de explicar con palabras lo agradecido que estoy de tenerte conmigo.
+
+                    No sabes lo bonito que es tener a la más bonita a mi lado. Mi sospecha de que éramos almas gemelas fue cierta, porque contigo puedo ver un mundo juntos, lleno de amor, de aventuras y de momentos que solo tú y yo entendemos.
+                    
+                    Recuerdo con mucho cariño cuando me diste esas muñecas tan especiales: una del Pato Donald y otra de Batman. Esos detalles tuyos, aunque pequeños, están llenos de amor y siempre me hacen sonreír. También recuerdo cuando fuimos al lago en Chapultepec, ese día fue mágico. Estar a tu lado, ver cómo brillaban tus ojos con cada rayo de sol y cómo tu risa llenaba el aire... no cambiaría eso por nada. Y cómo olvidar nuestro paseo por Aztlán, el parque de diversiones, donde volvimos a ser niños por un rato, tomados de la mano, viviendo momentos que quedarán en mi corazón para siempre.
+                    
+                    Gracias por existir, por ser tú, por dejarme amarte y por amarme también. Este amor apenas comienza, pero ya ha llenado mi vida de memorias hermosas </p>
+            </div>
+        </div>
+        <div class="animation-container">
+            <div class="rose-container">
+                <div class="stem" id="stem">
+                    <div class="leaf leaf-left" id="leaf-left"></div>
+                    <div class="leaf leaf-right" id="leaf-right"></div>
+                </div>
+                <div class="flower" id="flower">
+                    <!-- Los pétalos se generarán con JavaScript -->
+                </div>
+                <div class="heart" id="heart"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Crear pétalos de la rosa
+            const flower = document.getElementById('flower');
+            const numPetals = 24;
+            const layers = 3;
+            const petalsPerLayer = numPetals / layers;
+            
+            for (let layer = 0; layer < layers; layer++) {
+                for (let i = 0; i < petalsPerLayer; i++) {
+                    const petal = document.createElement('div');
+                    petal.className = 'petal';
+                    // Ajustar el ángulo y la posición basado en la capa
+                    const angle = i * (360 / petalsPerLayer);
+                    const offsetDistance = 5 + (layer * 10);
+                    petal.style.transform = `rotate(${angle}deg) translate(${offsetDistance}px, 0) scale(${0.7 + (layer * 0.2)})`;
+                    petal.style.zIndex = 10 - layer;
+                    flower.appendChild(petal);
+                }
+            
+            // Iniciar la animación después de un breve retraso
+            setTimeout(startAnimation, 1000);
+
+        function startAnimation() {
+            const stem = document.getElementById('stem');
+            const flower = document.getElementById('flower');
+            const heart = document.getElementById('heart');
+            const message = document.getElementById('message');
+            const petals = document.querySelectorAll('.petal');
+            const leafLeft = document.getElementById('leaf-left');
+            const leafRight = document.getElementById('leaf-right');
+            
+            // Paso 1: Crecer el tallo
+            stem.style.height = '150px';
+            
+            // Mostrar hojas después de crecer un poco el tallo
+            setTimeout(() => {
+                leafLeft.style.opacity = '1';
+                setTimeout(() => {
+                    leafRight.style.opacity = '1';
+                }, 700);
+            }, 1500);
+            
+            // Paso 2: Mostrar la flor pequeña
+            setTimeout(() => {
+                flower.style.opacity = '1';
+                flower.style.width = '80px';
+                flower.style.height = '80px';
+                
+                // Revelar pétalos en secuencia desde el centro hacia afuera
+                let delay = 0;
+                for (let layer = 0; layer < 3; layer++) {
+                    const startIdx = layer * 8;
+                    const endIdx = startIdx + 8;
+                    
+                    for (let i = startIdx; i < endIdx; i++) {
+                        if (petals[i]) {
+                            setTimeout(() => {
+                                petals[i].style.opacity = '1';
+                            }, delay);
+                            delay += 50;
+                        }
+                    }
+                    delay += 200; // Pausa adicional entre capas
+                }
+            }, 2500);
+            
+            // Paso 3: La flor crece
+            setTimeout(() => {
+                flower.style.width = '140px';
+                flower.style.height = '140px';
+                flower.style.bottom = '150px';
+            }, 6000);
+            
+            // Paso 4: Los pétalos caen uno a uno
+            setTimeout(() => {
+                petals.forEach((petal, index) => {
+                    setTimeout(() => {
+                        const randomDistance = 50 + Math.random() * 100;
+                        const randomAngle = (index * (360 / petals.length)) + (Math.random() * 20 - 10);
+                        petal.style.transform = `rotate(${randomAngle}deg) translate(${randomDistance}px, ${randomDistance}px)`;
+                        petal.style.opacity = '0';
+                    }, index * 100);
+                });
+            }, 9000);
+            
+            // Paso 5: Aparecer el corazón
+            setTimeout(() => {
+                heart.style.opacity = '1';
+                heart.style.transform = 'translateX(-50%) scale(1.2)';
+                
+                // Añadir pulsación al corazón
+                setTimeout(() => {
+                    heart.style.animation = 'heartbeat 1.5s infinite ease-in-out';
+                }, 1000);
+                
+                // Ocultar gradualmente el tallo y las hojas
+                stem.style.opacity = '0';
+                leafLeft.style.opacity = '0';
+                leafRight.style.opacity = '0';
+                
+                // Mostrar el mensaje
+                message.style.opacity = '1';
+                message.style.transform = 'translateY(0)';
+            }, 12500);
+        }
+            }
+                })        // Animación de latido del corazón
+        
+    </script>
+</body>
+</html>
