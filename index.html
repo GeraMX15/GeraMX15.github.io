@@ -3,380 +3,220 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Para ti, mi amor</title>
+    <title>Historieta Digital: Racionalidad Limitada</title>
+    <!-- Carga de Tailwind CSS para un diseño moderno y responsive -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Carga de íconos de Lucide para los personajes y elementos -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
     <style>
-        * {
-          margin: 0;
-          padding: 0;
-          box-sizing: border-box;
-        }
-    
+        @import url('https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap');
+        
+        /* Estilo base de la historieta */
         body {
-          font-family: 'Arial', sans-serif;
-          background-color: #f9f1f1;
-          min-height: 100vh;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          padding: 20px;
+            font-family: 'Comic Neue', cursive;
+            background-color: #f0f3f6;
+            padding: 1rem;
         }
-    
-        .container {
-          display: flex;
-          flex-direction: row;
-          width: 100%;
-          max-width: 1200px;
-          min-height: 80vh;
-          background-color: white;
-          border-radius: 20px;
-          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-          overflow: hidden;
+        .comic-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            gap: 1.5rem;
+            /* Diseño responsivo para las viñetas */
+            grid-template-columns: repeat(1, minmax(0, 1fr));
         }
-    
-        .message-container {
-          flex: 1;
-          padding: 30px;
-          background: linear-gradient(135deg, #f5f7fa 0%, #e8e8e8 100%);
-          overflow-y: auto;
+        @media (min-width: 640px) {
+            .comic-container {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
         }
-    
-        .message {
-          font-size: 1rem;
-          line-height: 1.7;
-          color: #333;
-          animation: fadeIn 2s ease forwards;
+        @media (min-width: 1024px) {
+            .comic-container {
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+            }
         }
-    
-        .message h1 {
-          color: #e74c3c;
-          margin-bottom: 20px;
-          font-size: 1.5rem;
-          text-align: center;
+
+        /* Estilo de la viñeta individual */
+        .panel {
+            background-color: #ffffff;
+            border: 4px solid #333;
+            border-radius: 12px;
+            padding: 1rem;
+            box-shadow: 6px 6px 0px 0px #333; /* Estilo de cómic */
+            transition: transform 0.2s;
+            display: flex;
+            flex-direction: column;
+            min-height: 280px; /* Altura mínima para uniformidad */
         }
-    
-        .message p {
-          margin-bottom: 15px;
-          text-align: justify;
+        .panel:hover {
+            transform: translateY(-4px);
+            box-shadow: 10px 10px 0px 0px #333;
         }
-    
-        .animation-container {
-          flex: 1;
-          background: linear-gradient(135deg, #f9e7e7 0%, #fce7e7 100%);
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          position: relative;
-          padding: 20px;
-        }
-    
-        .rose-container {
-          position: relative;
-          width: 200px;
-          height: 200px;
-        }
-    
-        .stem {
-          position: absolute;
-          width: 8px;
-          height: 0;
-          background: linear-gradient(to right, #388e3c, #2e7d32);
-          bottom: 0;
-          left: 50%;
-          transform: translateX(-50%);
-          border-radius: 4px;
-          z-index: 1;
-          transition: height 2s ease;
-        }
-    
-        .leaf {
-          position: absolute;
-          width: 20px;
-          height: 30px;
-          background: linear-gradient(135deg, #4caf50, #388e3c);
-          border-radius: 50% 50% 50% 0;
-          transform: rotate(-45deg);
-          opacity: 0;
-          transition: opacity 1s ease;
-          z-index: 2;
-        }
-    
-        .leaf:before {
-          content: '';
-          position: absolute;
-          width: 100%;
-          height: 100%;
-          background: linear-gradient(to bottom right, rgba(255,255,255,0.3), transparent);
-          border-radius: inherit;
-        }
-    
-        .leaf-right {
-          right: -15px;
-          top: 50px;
-          transform: rotate(135deg);
-        }
-    
-        .leaf-left {
-          left: -15px;
-          top: 80px;
-          transform: rotate(-45deg);
-        }
-    
-        .flower {
-          position: absolute;
-          width: 0;
-          height: 0;
-          bottom: 150px;
-          left: 50%;
-          transform: translateX(-50%);
-          opacity: 0;
-          transition: all 2s ease;
-        }
-    
-        .flower:before {
-          content: '';
-          position: absolute;
-          width: 26px;
-          height: 26px;
-          background: radial-gradient(circle, #43a047, #2e7d32);
-          border-radius: 50%;
-          top: 50%;
-          left: 50%;
-          transform: translate(-50%, -50%);
-          z-index: 2;
-        }
-    
-        .petal {
-          position: absolute;
-          background: linear-gradient(135deg, #e74c3c, #c0392b);
-          width: 40px;
-          height: 60px;
-          border-radius: 60% 0 60% 40%;
-          transform-origin: bottom center;
-          opacity: 0;
-          transition: all 1s ease;
-        }
-    
-        .petal:nth-child(odd) {
-          background: linear-gradient(135deg, #ff6b6b, #e74c3c);
-        }
-    
-        .petal:after {
-          content: '';
-          position: absolute;
-          width: 100%;
-          height: 100%;
-          background: radial-gradient(circle at 60% 40%, rgba(255,255,255,0.3), transparent 50%);
-          border-radius: inherit;
-        }
-    
-        .heart {
-          position: absolute;
-          width: 150px;
-          height: 135px;
-          bottom: 120px;
-          left: 50%;
-          transform: translateX(-50%) scale(0);
-          opacity: 0;
-          transition: all 2s ease;
-        }
-    
-        .heart:before,
-        .heart:after {
-          content: "";
-          position: absolute;
-          left: 75px;
-          top: 0;
-          width: 75px;
-          height: 120px;
-          background: #e74c3c;
-          border-radius: 75px 75px 0 0;
-          transform: rotate(-45deg);
-          transform-origin: 0 100%;
-        }
-    
-        .heart:after {
-          left: 0;
-          transform: rotate(45deg);
-          transform-origin: 100% 100%;
-        }
-    
-        @media (max-width: 768px) {
-          .container {
-            flex-direction: column-reverse;
-            height: auto;
-          }
-    
-          .message-container,
-          .animation-container {
-            width: 100%;
-            height: auto;
-            min-height: 50vh;
-          }
-    
-          .message {
+
+        /* Estilo para las burbujas de diálogo */
+        .bubble {
+            position: relative;
+            background: #e0f2f7; /* Color celeste claro */
+            border: 2px solid #333;
+            border-radius: 8px;
+            padding: 0.5rem 0.75rem;
+            margin-top: 0.5rem;
             font-size: 0.95rem;
-          }
-    
-          .rose-container {
-            width: 150px;
-            height: 150px;
-          }
-    
-          .heart {
-            width: 120px;
-            height: 110px;
-          }
+            font-weight: 700;
         }
-    
-        @keyframes fadeIn {
-          from {
-            opacity: 0;
-            transform: translateY(20px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
+
+        /* Burbuja de pensamiento */
+        .thought-bubble {
+            background: #fff8e1; /* Color amarillo claro */
         }
-      </style>
+
+        /* Estilo para la cola de la burbuja (para diálogo) */
+        .bubble::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 20px;
+            width: 0;
+            height: 0;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-top: 10px solid #333;
+        }
+        .bubble::before {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 20px;
+            width: 0;
+            height: 0;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-top: 10px solid #e0f2f7; /* Color de fondo de la burbuja */
+        }
+
+        /* Ajustes para la cola de la burbuja de pensamiento (puntos) */
+        .thought-bubble::after, .thought-bubble::before {
+            content: none; /* Elimina la cola triangular */
+        }
+        .thought-bubble .tail {
+            position: absolute;
+            bottom: -10px;
+            left: 15px;
+            font-size: 1.5rem;
+            line-height: 0;
+            color: #333;
+        }
+        
+        .thought-bubble .tail::before {
+            content: '...';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+        }
+
+        /* Íconos de personaje y objetos */
+        .character-icon {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+        }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <div class="message-container">
-            <div class="message" id="message">
-                <h1>Para el amor de mi vida</h1>
-                <p>Te hice este detalle por nuestros tres meses de novios porque tú te mereces cosas bonitas y creativas, cosas que estén a la altura de lo que me haces sentir cada día. Desde que llegaste a mi vida, le has dado tanto sentido, tanta luz, que no hay forma de explicar con palabras lo agradecido que estoy de tenerte conmigo.
 
-                    No sabes lo bonito que es tener a la más bonita a mi lado. Mi sospecha de que éramos almas gemelas fue cierta, porque contigo puedo ver un mundo juntos, lleno de amor, de aventuras y de momentos que solo tú y yo entendemos.
-                    
-                    Recuerdo con mucho cariño cuando me diste esas muñecas tan especiales: una del Pato Donald y otra de Batman. Esos detalles tuyos, aunque pequeños, están llenos de amor y siempre me hacen sonreír. También recuerdo cuando fuimos al lago en Chapultepec, ese día fue mágico. Estar a tu lado, ver cómo brillaban tus ojos con cada rayo de sol y cómo tu risa llenaba el aire... no cambiaría eso por nada. Y cómo olvidar nuestro paseo por Aztlán, el parque de diversiones, donde volvimos a ser niños por un rato, tomados de la mano, viviendo momentos que quedarán en mi corazón para siempre.
-                    
-                    Gracias por existir, por ser tú, por dejarme amarte y por amarme también. Este amor apenas comienza, pero ya ha llenado mi vida de memorias hermosas </p>
+    <header class="text-center mb-6 p-4 bg-white rounded-xl shadow-lg border-b-4 border-black">
+        <h1 class="text-3xl font-bold text-gray-800">Historieta Digital: Modelo de Racionalidad Limitada</h1>
+        <p class="text-xl font-medium text-indigo-600">Dilema: Elegir Software de Gestión de Proyectos</p>
+    </header>
+
+    <div class="comic-container">
+        
+        <!-- VIÑETA 1/6: LA URGENCIA -->
+        <div class="panel">
+            <div class="text-lg font-bold mb-2 p-1 bg-red-100 rounded">1. EL PROBLEMA Y EL PLAZO</div>
+            <div class="flex items-center justify-center h-20">
+                <i data-lucide="laptop" class="character-icon text-red-600"></i>
+                <i data-lucide="user-x" class="character-icon text-gray-700 mx-4"></i>
+                <i data-lucide="clock" class="character-icon text-red-600 animate-pulse"></i>
             </div>
-        </div>
-        <div class="animation-container">
-            <div class="rose-container">
-                <div class="stem" id="stem">
-                    <div class="leaf leaf-left" id="leaf-left"></div>
-                    <div class="leaf leaf-right" id="leaf-right"></div>
-                </div>
-                <div class="flower" id="flower">
-                    <!-- Los pétalos se generarán con JavaScript -->
-                </div>
-                <div class="heart" id="heart"></div>
+            <div class="bubble">
+                <span class="font-normal text-sm">NARRADOR:</span> ¡Sofía debe elegir un software de gestión YA! El plazo para empezar el proyecto es en 48 horas.
             </div>
+            <div class="mt-auto text-xs text-gray-500 pt-2">Paso: Identificación del Problema.</div>
         </div>
+
+        <!-- VIÑETA 2/6: SOBRECARGA DE OPCIONES -->
+        <div class="panel">
+            <div class="text-lg font-bold mb-2 p-1 bg-yellow-100 rounded">2. LOS LÍMITES COGNITIVOS</div>
+            <div class="flex items-center justify-center h-20">
+                <i data-lucide="user" class="character-icon text-blue-500"></i>
+                <div class="text-4xl text-gray-400 font-extrabold mx-2">VS.</div>
+                <i data-lucide="server-off" class="character-icon text-yellow-600"></i>
+            </div>
+            <div class="thought-bubble">
+                <span class="font-normal text-sm">SOFÍA (Pensamiento):</span> ¡Hay **demasiados** softwares! Jira, Trello, Asana, ClickUp... ¡La información es infinita! No puedo analizarlos todos.
+            </div>
+            <div class="mt-auto text-xs text-gray-500 pt-2">Paso: Reconocimiento de Límites y Sobrecarga.</div>
+        </div>
+
+        <!-- VIÑETA 3/6: ESTABLECIENDO UN UMBRAL -->
+        <div class="panel">
+            <div class="text-lg font-bold mb-2 p-1 bg-green-100 rounded">3. DEFINIR LO 'SATISFACTORIO'</div>
+            <div class="flex items-center justify-center h-20">
+                <i data-lucide="list-checks" class="character-icon text-green-600"></i>
+            </div>
+            <div class="bubble">
+                <span class="font-normal text-sm">SOFÍA:</span> Solo revisaré los que cumplan 3 criterios clave: 1) Plan gratuito, 2) Interfaz simple, y 3) Integración con nuestro email.
+            </div>
+            <div class="mt-auto text-xs text-gray-500 pt-2">Paso: Generación de Alternativas (Filtradas).</div>
+        </div>
+
+        <!-- VIÑETA 4/6: ELECCIÓN SATISFACTORIA -->
+        <div class="panel">
+            <div class="text-lg font-bold mb-2 p-1 bg-blue-100 rounded">4. LA DECISIÓN "SUFICIENTEMENTE BUENA"</div>
+            <div class="flex items-center justify-center h-20">
+                <i data-lucide="check-circle" class="character-icon text-blue-500"></i>
+                <i data-lucide="package-check" class="character-icon text-blue-700 mx-4"></i>
+            </div>
+            <div class="thought-bubble">
+                <span class="font-normal text-sm">SOFÍA (Pensamiento):</span> "TaskFlow" cumple exactamente los 3 puntos. No es el *mejor* del mundo, ¡pero es **suficiente** para resolver el problema urgente!
+            </div>
+            <div class="mt-auto text-xs text-gray-500 pt-2">Paso: Elección (Satisfacción sobre Optimización).</div>
+        </div>
+
+        <!-- VIÑETA 5/6: RESULTADO INMEDIATO -->
+        <div class="panel">
+            <div class="text-lg font-bold mb-2 p-1 bg-indigo-100 rounded">5. ÉXITO DE LA IMPLEMENTACIÓN</div>
+            <div class="flex items-center justify-center h-20">
+                <i data-lucide="users" class="character-icon text-indigo-600"></i>
+                <i data-lucide="trending-up" class="character-icon text-indigo-600 mx-4"></i>
+            </div>
+            <div class="bubble">
+                <span class="font-normal text-sm">COLEGA 1:</span> ¡Funciona! Ya tenemos las tareas organizadas a tiempo para el lanzamiento. ¡Buen trabajo!
+            </div>
+            <div class="mt-auto text-xs text-gray-500 pt-2">Paso: Resultado (Solución oportuna).</div>
+        </div>
+
+        <!-- VIÑETA 6/6: REFLEXIÓN Y CONCLUSIÓN -->
+        <div class="panel">
+            <div class="text-lg font-bold mb-2 p-1 bg-purple-100 rounded">6. CONCLUSIÓN DEL MODELO</div>
+            <div class="flex items-center justify-center h-20">
+                <i data-lucide="brain" class="character-icon text-purple-600"></i>
+            </div>
+            <div class="thought-bubble">
+                <span class="font-normal text-sm">SOFÍA (NARRADOR):</span> Usar la **Racionalidad Limitada** me salvó. En una situación de urgencia, lo **suficiente** fue lo **ideal** y evité el agotamiento por análisis.
+            </div>
+            <div class="mt-auto text-xs text-gray-500 pt-2">Paso: Consecuencias y Reflexión Final.</div>
+        </div>
+
     </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Crear pétalos de la rosa
-            const flower = document.getElementById('flower');
-            const numPetals = 24;
-            const layers = 3;
-            const petalsPerLayer = numPetals / layers;
-            
-            for (let layer = 0; layer < layers; layer++) {
-                for (let i = 0; i < petalsPerLayer; i++) {
-                    const petal = document.createElement('div');
-                    petal.className = 'petal';
-                    // Ajustar el ángulo y la posición basado en la capa
-                    const angle = i * (360 / petalsPerLayer);
-                    const offsetDistance = 5 + (layer * 10);
-                    petal.style.transform = `rotate(${angle}deg) translate(${offsetDistance}px, 0) scale(${0.7 + (layer * 0.2)})`;
-                    petal.style.zIndex = 10 - layer;
-                    flower.appendChild(petal);
-                }
-            
-            // Iniciar la animación después de un breve retraso
-            setTimeout(startAnimation, 1000);
+    <footer class="text-center mt-6 p-4 text-sm text-gray-600">
+        <p>Modelo Aplicado: Racionalidad Limitada (Herbert Simon)</p>
+    </footer>
 
-        function startAnimation() {
-            const stem = document.getElementById('stem');
-            const flower = document.getElementById('flower');
-            const heart = document.getElementById('heart');
-            const message = document.getElementById('message');
-            const petals = document.querySelectorAll('.petal');
-            const leafLeft = document.getElementById('leaf-left');
-            const leafRight = document.getElementById('leaf-right');
-            
-            // Paso 1: Crecer el tallo
-            stem.style.height = '150px';
-            
-            // Mostrar hojas después de crecer un poco el tallo
-            setTimeout(() => {
-                leafLeft.style.opacity = '1';
-                setTimeout(() => {
-                    leafRight.style.opacity = '1';
-                }, 700);
-            }, 1500);
-            
-            // Paso 2: Mostrar la flor pequeña
-            setTimeout(() => {
-                flower.style.opacity = '1';
-                flower.style.width = '80px';
-                flower.style.height = '80px';
-                
-                // Revelar pétalos en secuencia desde el centro hacia afuera
-                let delay = 0;
-                for (let layer = 0; layer < 3; layer++) {
-                    const startIdx = layer * 8;
-                    const endIdx = startIdx + 8;
-                    
-                    for (let i = startIdx; i < endIdx; i++) {
-                        if (petals[i]) {
-                            setTimeout(() => {
-                                petals[i].style.opacity = '1';
-                            }, delay);
-                            delay += 50;
-                        }
-                    }
-                    delay += 200; // Pausa adicional entre capas
-                }
-            }, 2500);
-            
-            // Paso 3: La flor crece
-            setTimeout(() => {
-                flower.style.width = '140px';
-                flower.style.height = '140px';
-                flower.style.bottom = '150px';
-            }, 6000);
-            
-            // Paso 4: Los pétalos caen uno a uno
-            setTimeout(() => {
-                petals.forEach((petal, index) => {
-                    setTimeout(() => {
-                        const randomDistance = 50 + Math.random() * 100;
-                        const randomAngle = (index * (360 / petals.length)) + (Math.random() * 20 - 10);
-                        petal.style.transform = `rotate(${randomAngle}deg) translate(${randomDistance}px, ${randomDistance}px)`;
-                        petal.style.opacity = '0';
-                    }, index * 100);
-                });
-            }, 9000);
-            
-            // Paso 5: Aparecer el corazón
-            setTimeout(() => {
-                heart.style.opacity = '1';
-                heart.style.transform = 'translateX(-50%) scale(1.2)';
-                
-                // Añadir pulsación al corazón
-                setTimeout(() => {
-                    heart.style.animation = 'heartbeat 1.5s infinite ease-in-out';
-                }, 1000);
-                
-                // Ocultar gradualmente el tallo y las hojas
-                stem.style.opacity = '0';
-                leafLeft.style.opacity = '0';
-                leafRight.style.opacity = '0';
-                
-                // Mostrar el mensaje
-                message.style.opacity = '1';
-                message.style.transform = 'translateY(0)';
-            }, 12500);
-        }
-            }
-                })        // Animación de latido del corazón
-        
+    <!-- Script para inicializar los íconos de Lucide -->
+    <script>
+        lucide.createIcons();
     </script>
 </body>
 </html>
